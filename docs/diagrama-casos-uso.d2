@@ -1,0 +1,70 @@
+direction: right
+
+Cliente: {
+  shape: person
+  style.fill: "#0e224f"
+  style.font-color: white
+}
+Administrador: {
+  shape: person
+  style.fill: "#0e224f"
+  style.font-color: white
+}
+"Atención / Cocina": {
+  shape: person
+  style.fill: "#0e224f"
+  style.font-color: white
+}
+
+Sistema: {
+  label: "Sistema web El Tiburón"
+  style.stroke: "#0e224f"
+  style.stroke-width: 2
+  style.fill: "#ffffff"
+
+  "Operaciones del cliente": {
+    label: "Operaciones del cliente"
+    style.fill: "#eef3ff"
+    style.stroke: "#9aaed8"
+    grid-columns: 2
+
+    catalogo: "Consultar catálogo"
+    detalle: "Consultar detalle"
+    carrito: "Gestionar carrito"
+    pedido: "Registrar y confirmar pedido"
+    estado: "Consultar estado"
+    acceso: "Registrarse / iniciar sesión"
+    reclamo: "Registrar reclamo"
+    contacto: "Enviar contacto"
+  }
+
+  "Operaciones administrativas": {
+    label: "Operaciones administrativas"
+    style.fill: "#fff9e8"
+    style.stroke: "#d8b85c"
+    grid-columns: 2
+
+    productos: "Gestionar productos"
+    promociones: "Gestionar promociones"
+    pedidos: "Actualizar pedidos"
+    reclamos: "Consultar reclamos"
+  }
+}
+
+Cliente -> Sistema."Operaciones del cliente".catalogo
+Cliente -> Sistema."Operaciones del cliente".detalle
+Cliente -> Sistema."Operaciones del cliente".carrito
+Cliente -> Sistema."Operaciones del cliente".pedido
+Cliente -> Sistema."Operaciones del cliente".estado
+Cliente -> Sistema."Operaciones del cliente".acceso
+Cliente -> Sistema."Operaciones del cliente".reclamo
+Cliente -> Sistema."Operaciones del cliente".contacto
+
+Administrador -> Sistema."Operaciones administrativas".productos
+Administrador -> Sistema."Operaciones administrativas".promociones
+Administrador -> Sistema."Operaciones administrativas".pedidos
+Administrador -> Sistema."Operaciones administrativas".reclamos
+"Atención / Cocina" -> Sistema."Operaciones administrativas".pedidos
+
+Sistema."Operaciones del cliente".pedido -> Sistema."Operaciones administrativas".pedidos: "procesa"
+Sistema."Operaciones del cliente".estado -> Sistema."Operaciones administrativas".pedidos: "consulta"

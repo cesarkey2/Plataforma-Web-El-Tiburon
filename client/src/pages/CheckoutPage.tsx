@@ -1,0 +1,19 @@
+import { CheckCircle2, MapPin, Store } from "lucide-react";
+import { useState } from "react";
+import { Link } from "wouter";
+import { toast } from "sonner";
+import SiteFooter from "@/components/SiteFooter";
+import SiteHeader from "@/components/SiteHeader";
+import { useCart } from "@/contexts/CartContext";
+import { trpc } from "@/lib/trpc";
+
+export default function CheckoutPage() {
+  const { items, subtotal, clearCart } = useCart();
+  const [success, setSuccess] = useState<{ code: string; total: string } | null>(null);
+  const [form, setForm] = useState({ customerName: "", customerEmail: "", customerPhone: "", attentionType: "pickup" as "pickup" | "delivery", address: "" });
+  const createOrder = trpc.orders.create.useMutation({ onSuccess: result => { clearCart(); setSuccess(result); }, onError: error => toast.error(error.message) });
+  if (success) return <div className="site-shell"><SiteHeader /><main className="page-main success-page"><CheckCircle2 size={64} /><span className="eyebrow">Pedido registrado</span><h1>¡Gracias por elegirnos!</h1><p>Tu pedido quedó registrado con el código:</p><strong className="order-code">{success.code}</strong><p>Total referencial: <b>S/ {Number(success.total).toFixed(2)}</b></p><Link href="/" className="primary-button">Volver al inicio</Link></main><SiteFooter /></div>;
+  if (items.length === 0) return <div className="site-shell"><SiteHeader /><main className="page-main empty-state"><h1>No hay productos para confirmar</h1><Link href="/productos" className="primary-button">Volver al menú</Link></main><SiteFooter /></div>;
+  const submit = (event: React.FormEvent) => { event.preventDefault(); if (form.attentionType === "delivery" && !form.address.trim()) { toast.error("Ingresa una dirección para delivery."); return; } createOrder.mutate({ ...form, items: items.map(item => ({ productId: item.id, quantity: item.quantity })) }); };
+  return <div className="site-shell"><SiteHeader /><main className="page-main"><div className="page-hero compact"><span>Último paso</span><h1>Confirma tu pedido</h1></div><div className="checkout-layout"><form className="checkout-form" onSubmit={submit}><h2>Datos de atención</h2><div className="form-row"><label>Nombre completo<input required value={form.customerName} onChange={event => setForm({ ...form, customerName: event.target.value })} /></label><label>Teléfono<input required value={form.customerPhone} onChange={event => setForm({ ...form, customerPhone: event.target.value })} /></label></div><label>Correo electrónico<input required type="email" value={form.customerEmail} onChange={event => setForm({ ...form, customerEmail: event.target.value })} /></label><div className="attention-options"><button type="button" className={form.attentionType === "pickup" ? "selected" : ""} onClick={() => setForm({ ...form, attentionType: "pickup" })}><Store size={22} /><span>Recojo en local</span></button><button type="button" className={form.attentionType === "delivery" ? "selected" : ""} onClick={() => setForm({ ...form, attentionType: "delivery" })}><MapPin size={22} /><span>Delivery</span></button></div>{form.attentionType === "delivery" && <label>Dirección de entrega<textarea required rows={3} value={form.address} onChange={event => setForm({ ...form, address: event.target.value })} /></label>}<button className="primary-button full-button" disabled={createOrder.isPending}>{createOrder.isPending ? "Registrando..." : "Confirmar pedido"}</button><small>En esta etapa el pago se coordina directamente con el establecimiento.</small></form><aside className="summary-card"><span>Tu pedido</span>{items.map(item => <div key={item.id}><span>{item.quantity} × {item.name}</span><strong>S/ {(Number(item.price) * item.quantity).toFixed(2)}</strong></div>)}<hr /><div className="summary-total"><span>Total</span><strong>S/ {subtotal.toFixed(2)}</strong></div></aside></div></main><SiteFooter /></div>;
+}

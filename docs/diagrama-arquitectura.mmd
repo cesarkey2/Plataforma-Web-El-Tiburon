@@ -1,0 +1,9 @@
+flowchart TB
+  U[Cliente / navegador] --> UI[React + Vite + Wouter]
+  UI --> API[Express + tRPC]
+  API --> AUTH[Autenticación y roles]
+  API --> ORM[Drizzle ORM]
+  ORM --> DB[(MySQL administrado)]
+  UI --> ASSETS[Assets locales de Figma]
+  API --> HEALTH["/api/health"]
+  API --> ROUTES["/manus-routes.json"]

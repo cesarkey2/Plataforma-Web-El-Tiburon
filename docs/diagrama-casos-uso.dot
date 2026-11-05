@@ -1,0 +1,72 @@
+digraph CasosDeUso {
+  graph [rankdir=LR, bgcolor="white", pad="0.35", nodesep="0.35", ranksep="1.0", splines=ortho, fontname="Arial", label="Diagrama de casos de uso — Sistema web El Tiburón", labelloc=t, fontsize=20];
+  node [shape=ellipse, style="filled", fontname="Arial", fontsize=12, color="#8b7cc8", fillcolor="#f4f0ff", fontcolor="#17243d", penwidth=1.5, margin="0.18,0.10"];
+  edge [color="#52627b", penwidth=1.2, arrowsize=0.7];
+
+  Cliente [shape=box, style="rounded,filled", fillcolor="#0e224f", color="#071a43", fontcolor="white", penwidth=2, label="Cliente"];
+  Administrador [shape=box, style="rounded,filled", fillcolor="#0e224f", color="#071a43", fontcolor="white", penwidth=2, label="Administrador"];
+  Cocina [shape=box, style="rounded,filled", fillcolor="#0e224f", color="#071a43", fontcolor="white", penwidth=2, label="Atención / Cocina"];
+
+  subgraph cluster_sistema {
+    label="Sistema web El Tiburón";
+    color="#0e224f";
+    penwidth=2;
+    style="rounded";
+    fontname="Arial";
+    fontsize=16;
+
+    subgraph cluster_cliente {
+      label="Operaciones del cliente";
+      color="#9aaed8";
+      fillcolor="#eef3ff";
+      style="rounded,filled";
+      fontsize=13;
+      catalogo [label="Consultar catálogo"];
+      detalle [label="Consultar detalle"];
+      carrito [label="Gestionar carrito"];
+      pedido [label="Registrar y confirmar pedido"];
+      estado [label="Consultar estado"];
+      acceso [label="Registrarse / iniciar sesión"];
+      reclamo [label="Registrar reclamo"];
+      contacto [label="Enviar contacto"];
+      {rank=same; catalogo; detalle; carrito; pedido;}
+      {rank=same; estado; acceso; reclamo; contacto;}
+      catalogo -> detalle -> carrito -> pedido [style=invis, weight=10];
+      estado -> acceso -> reclamo -> contacto [style=invis, weight=10];
+    }
+
+    subgraph cluster_admin {
+      label="Operaciones administrativas";
+      color="#d8b85c";
+      fillcolor="#fff9e8";
+      style="rounded,filled";
+      fontsize=13;
+      productos [label="Gestionar productos"];
+      promociones [label="Gestionar promociones"];
+      actualizar [label="Actualizar pedidos"];
+      reclamos [label="Consultar reclamos"];
+      {rank=same; productos; promociones;}
+      {rank=same; actualizar; reclamos;}
+      productos -> promociones [style=invis, weight=10];
+      actualizar -> reclamos [style=invis, weight=10];
+    }
+  }
+
+  Cliente -> catalogo;
+  Cliente -> detalle;
+  Cliente -> carrito;
+  Cliente -> pedido;
+  Cliente -> estado;
+  Cliente -> acceso;
+  Cliente -> reclamo;
+  Cliente -> contacto;
+
+  Administrador -> productos;
+  Administrador -> promociones;
+  Administrador -> actualizar;
+  Administrador -> reclamos;
+  Cocina -> actualizar;
+
+  pedido -> actualizar [style=dashed, label=" procesa", constraint=false];
+  estado -> actualizar [style=dashed, label=" consulta", constraint=false];
+}

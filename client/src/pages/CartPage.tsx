@@ -1,0 +1,10 @@
+import { ArrowRight, Minus, Plus, Trash2 } from "lucide-react";
+import { Link } from "wouter";
+import SiteFooter from "@/components/SiteFooter";
+import SiteHeader from "@/components/SiteHeader";
+import { useCart } from "@/contexts/CartContext";
+
+export default function CartPage() {
+  const { items, subtotal, updateQuantity, removeItem } = useCart();
+  return <div className="site-shell"><SiteHeader /><main className="page-main"><div className="page-hero compact"><span>Tu selección</span><h1>Carrito de compras</h1></div>{items.length === 0 ? <div className="empty-state"><h2>Tu carrito está vacío</h2><p>Agrega tus platos favoritos para continuar.</p><Link href="/productos" className="primary-button">Explorar productos <ArrowRight size={18} /></Link></div> : <div className="cart-layout"><div className="cart-list">{items.map(item => <article className="cart-item" key={item.id}><img src={item.imageUrl} alt={item.name} /><div className="cart-item-main"><h3>{item.name}</h3><p>S/ {Number(item.price).toFixed(2)} por unidad</p><div className="quantity-control"><button onClick={() => updateQuantity(item.id, item.quantity - 1)} aria-label="Reducir cantidad"><Minus size={15} /></button><strong>{item.quantity}</strong><button onClick={() => updateQuantity(item.id, item.quantity + 1)} aria-label="Aumentar cantidad"><Plus size={15} /></button></div></div><strong className="line-total">S/ {(Number(item.price) * item.quantity).toFixed(2)}</strong><button className="icon-button danger" onClick={() => removeItem(item.id)} aria-label={`Eliminar ${item.name}`}><Trash2 size={18} /></button></article>)}</div><aside className="summary-card"><span>Resumen del pedido</span><div><span>Subtotal</span><strong>S/ {subtotal.toFixed(2)}</strong></div><div><span>Delivery</span><strong>Por confirmar</strong></div><hr /><div className="summary-total"><span>Total</span><strong>S/ {subtotal.toFixed(2)}</strong></div><Link href="/checkout" className="primary-button full-button">Continuar pedido <ArrowRight size={18} /></Link></aside></div>}</main><SiteFooter /></div>;
+}

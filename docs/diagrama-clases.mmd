@@ -1,0 +1,54 @@
+classDiagram
+  class Usuario {
+    +int id
+    +string openId
+    +string name
+    +string email
+    +string role
+  }
+  class Producto {
+    +int id
+    +string name
+    +string description
+    +decimal price
+    +string imageUrl
+    +bool isAvailable
+  }
+  class Promocion {
+    +int id
+    +string name
+    +string type
+    +decimal value
+    +bool isActive
+  }
+  class Pedido {
+    +int id
+    +string code
+    +string attentionType
+    +decimal subtotal
+    +decimal total
+    +string status
+  }
+  class DetallePedido {
+    +int id
+    +int quantity
+    +decimal unitPrice
+    +decimal subtotal
+  }
+  class Reclamo {
+    +int id
+    +string claimType
+    +string description
+    +string status
+  }
+  class MensajeContacto {
+    +int id
+    +string name
+    +string email
+    +string message
+    +string status
+  }
+  Usuario "1" --> "0..*" Pedido
+  Usuario "1" --> "0..*" Reclamo
+  Pedido "1" *-- "1..*" DetallePedido
+  Producto "1" --> "0..*" DetallePedido

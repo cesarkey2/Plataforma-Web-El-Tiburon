@@ -1,0 +1,34 @@
+flowchart LR
+  Cliente([Cliente])
+  Admin([Administrador])
+  Cocina([Atención / Cocina])
+  Sistema([Sistema])
+  CU1((Consultar catálogo))
+  CU2((Consultar detalle))
+  CU3((Gestionar carrito))
+  CU4((Registrar y confirmar pedido))
+  CU5((Consultar estado))
+  CU6((Registrarse / iniciar sesión))
+  CU7((Gestionar productos))
+  CU8((Gestionar promociones))
+  CU9((Actualizar pedidos))
+  CU10((Registrar reclamo))
+  CU11((Consultar reclamos))
+  CU12((Enviar contacto))
+  Cliente --- CU1
+  Cliente --- CU2
+  Cliente --- CU3
+  Cliente --- CU4
+  Cliente --- CU5
+  Cliente --- CU6
+  Cliente --- CU10
+  Cliente --- CU12
+  Admin --- CU6
+  Admin --- CU7
+  Admin --- CU8
+  Admin --- CU9
+  Admin --- CU11
+  Cocina --- CU9
+  Sistema --- CU4
+  Sistema --- CU5
+  Sistema --- CU6

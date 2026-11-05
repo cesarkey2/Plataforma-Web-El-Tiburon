@@ -1,0 +1,62 @@
+erDiagram
+  USERS ||--o{ ORDERS : registra
+  USERS ||--o{ CLAIMS : presenta
+  ORDERS ||--|{ ORDER_ITEMS : contiene
+  PRODUCTS ||--o{ ORDER_ITEMS : aparece_en
+  USERS {
+    int id PK
+    varchar openId UK
+    varchar email
+    enum role
+    timestamp createdAt
+  }
+  PRODUCTS {
+    int id PK
+    varchar name
+    text description
+    decimal price
+    varchar imageUrl
+    boolean isAvailable
+  }
+  PROMOTIONS {
+    int id PK
+    varchar name
+    enum type
+    decimal value
+    timestamp startDate
+    timestamp endDate
+    boolean isActive
+  }
+  ORDERS {
+    int id PK
+    varchar code UK
+    int userId FK
+    enum attentionType
+    decimal subtotal
+    decimal total
+    enum status
+    timestamp createdAt
+  }
+  ORDER_ITEMS {
+    int id PK
+    int orderId FK
+    int productId FK
+    varchar productName
+    int quantity
+    decimal unitPrice
+    decimal subtotal
+  }
+  CLAIMS {
+    int id PK
+    int userId FK
+    varchar fullName
+    enum claimType
+    text description
+    enum status
+  }
+  CONTACT_MESSAGES {
+    int id PK
+    varchar email
+    text message
+    enum status
+  }
